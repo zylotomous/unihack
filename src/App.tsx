@@ -1,10 +1,6 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
 
-// idk if this alr cover all of it or not
 interface Macros {
   protein: number, 
   fat: number, 
@@ -12,8 +8,15 @@ interface Macros {
   budget: number,
 }
 
+interface InputState {
+  protein: string;
+  fat: string;
+  calories: string;
+  budget: string;
+}
+
 function App() {
-  //const [count, setCount] = useState(0)
+  // Keep the numeric values for the actual data
   const [formData, setFormData] = useState<Macros>({
     protein: 0,
     fat: 0,
@@ -21,16 +24,56 @@ function App() {
     budget: 0
   });
   
-  // NEW: State to track if filters are visible
+  // Separate state for input display values (as strings)
+  const [inputValues, setInputValues] = useState<InputState>({
+    protein: '0',
+    fat: '0',
+    calories: '0',
+    budget: '0'
+  });
+  
   const [showFilters, setShowFilters] = useState(false);
 
-  // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: parseFloat(value) || 0
+    
+    // Update the display value (can be empty string or any number)
+    setInputValues({
+      ...inputValues,
+      [name]: value
     });
+    
+    // Only update the numeric formData if there's a valid number
+    // This prevents updating while user is deleting
+    if (value === '') {
+      // Don't update formData yet - wait until they finish typing
+      return;
+    }
+    
+    const numValue = parseFloat(value);
+    if (!isNaN(numValue)) {
+      setFormData({
+        ...formData,
+        [name]: numValue
+      });
+    }
+  };
+
+  // When input loses focus, ensure empty fields become 0
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    
+    if (value === '') {
+      // Reset to 0 in both states
+      setInputValues({
+        ...inputValues,
+        [name]: '0'
+      });
+      setFormData({
+        ...formData,
+        [name]: 0
+      });
+    }
   };
 
   const [apiResult, setApiResult] = useState<any[]>([]);
@@ -56,22 +99,15 @@ function App() {
     return date.getFullYear();
   }
 
-  // Toggle filter visibility
-  const toggleFilters = () => {
-    setShowFilters(!showFilters);
-  }
-
   return (
     <>
     <div id='header'>
-      {/* NEW: Button to toggle filters */}
       <button onClick={toggleFilters} id='toggleFilterBtn'>
         {showFilters ? 'Hide Filters' : 'Show Filters'}
       </button>
     </div>
     
     <div id='main content'>
-      {/* Conditionally render filters based on showFilters state */}
       {showFilters && (
         <div className='filter'>
           <form onSubmit={requestApi}>
@@ -79,8 +115,11 @@ function App() {
               Protein: 
               <input 
                 type='number' 
-                name='protein'
+                name='protein' 
+                placeholder="0"
+                value={inputValues.protein}
                 onChange={handleInputChange}
+                onBlur={handleBlur}
               />
             </label>
             
@@ -89,7 +128,10 @@ function App() {
               <input 
                 type='number' 
                 name='fat' 
+                placeholder="0"
+                value={inputValues.fat}
                 onChange={handleInputChange}
+                onBlur={handleBlur}
               />
             </label>
             
@@ -100,7 +142,10 @@ function App() {
               <input 
                 type='number' 
                 name='calories' 
+                placeholder="0"
+                value={inputValues.calories}
                 onChange={handleInputChange}
+                onBlur={handleBlur}
               />
             </label>
             
@@ -108,8 +153,11 @@ function App() {
               Budget: 
               <input 
                 type='number' 
-                name='budget'
+                name='budget' 
+                placeholder="0"
+                value={inputValues.budget}
                 onChange={handleInputChange}
+                onBlur={handleBlur}
               />
             </label>
             
@@ -117,13 +165,17 @@ function App() {
             
             <button id='buttonForm' type='button'>Apply Filter</button>
           </form>
+          
+          {/* Optional: Display current numeric values for debugging */}
+          <div style={{marginTop: '10px', fontSize: '12px', color: '#666'}}>
+            Current values: Protein: {formData.protein}g, Fat: {formData.fat}g, Calories: {formData.calories}, Budget: ${formData.budget}
+          </div>
         </div>
       )}
       
       <div className='map'></div>
     </div>
 
-    {/* you guys could remove this is we're not going to use CC license */}
     <div id='footer'>
       <p>This work is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a><img id='cc'src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC"/><img id='cc' src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY"/><img id='cc' src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC"/></p>
     </div>
