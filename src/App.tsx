@@ -12,7 +12,6 @@ interface Macros {
   budget: number,
 }
 
-
 function App() {
   //const [count, setCount] = useState(0)
   const [formData, setFormData] = useState<Macros>({
@@ -21,6 +20,18 @@ function App() {
     calories: 0,
     budget: 0
   });
+  
+  // NEW: State to track if filters are visible
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Handle input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: parseFloat(value) || 0
+    });
+  };
 
   function requestApi () {
     let res = setFormData;
@@ -31,22 +42,75 @@ function App() {
     const date:Date = new Date();
     return date.getFullYear();
   }
+
+  // Toggle filter visibility
+  const toggleFilters = () => {
+    setShowFilters(!showFilters);
+  }
+
   return (
     <>
-    <div id='header'></div>
+    <div id='header'>
+      {/* NEW: Button to toggle filters */}
+      <button onClick={toggleFilters} id='toggleFilterBtn'>
+        {showFilters ? 'Hide Filters' : 'Show Filters'}
+      </button>
+    </div>
+    
     <div id='main content'>
-      {/* idk how to hide and fix ts tbh */}
-      <div className='filter'>
-        <form onSubmit={requestApi()}>
-          <label className='inputForm'>Protein: <input type='number' name='protein' value={formData.protein}/></label>
-          <label className='inputForm'>Fat: <input type='number' name='fat' value={formData.fat}/></label>
-          <br/>
-          <label className='inputForm'>Calories: <input type='number' name='calories' value={formData.calories}/></label>
-          <label className='inputForm'>Budget: <input type='number' name='budget' value={formData.budget}/></label>
-          <br/>
-          <button id='buttonForm' type='button'>Apply Filter</button>
-        </form>
-      </div>
+      {/* Conditionally render filters based on showFilters state */}
+      {showFilters && (
+        <div className='filter'>
+          <form onSubmit={requestApi()}>
+            <label className='inputForm'>
+              Protein: 
+              <input 
+                type='number' 
+                name='protein' 
+                value={formData.protein}
+                onChange={handleInputChange}
+              />
+            </label>
+            
+            <label className='inputForm'>
+              Fat: 
+              <input 
+                type='number' 
+                name='fat' 
+                value={formData.fat}
+                onChange={handleInputChange}
+              />
+            </label>
+            
+            <br/>
+            
+            <label className='inputForm'>
+              Calories: 
+              <input 
+                type='number' 
+                name='calories' 
+                value={formData.calories}
+                onChange={handleInputChange}
+              />
+            </label>
+            
+            <label className='inputForm'>
+              Budget: 
+              <input 
+                type='number' 
+                name='budget' 
+                value={formData.budget}
+                onChange={handleInputChange}
+              />
+            </label>
+            
+            <br/>
+            
+            <button id='buttonForm' type='button'>Apply Filter</button>
+          </form>
+        </div>
+      )}
+      
       <div className='map'></div>
     </div>
 
