@@ -33,9 +33,22 @@ function App() {
     });
   };
 
-  function requestApi () {
-    let res = setFormData;
-    return res;
+  const [apiResult, setApiResult] = useState<any[]>([]);
+  const requestApi = async (e) => {
+    e.preventDefault();
+    try {
+        const res = await fetch(`api`, {
+        method: 'GET', 
+        headers: {
+          'Content/type' : "application/json"
+        }, 
+        body: JSON.stringify(formData)
+      })
+      const data = await res.json();
+      setApiResult(data); 
+    } catch (e) {
+      
+    }
   }
 
   function getYear () {
@@ -61,13 +74,12 @@ function App() {
       {/* Conditionally render filters based on showFilters state */}
       {showFilters && (
         <div className='filter'>
-          <form onSubmit={requestApi()}>
+          <form onSubmit={requestApi}>
             <label className='inputForm'>
               Protein: 
               <input 
                 type='number' 
-                name='protein' 
-                value={formData.protein}
+                name='protein'
                 onChange={handleInputChange}
               />
             </label>
@@ -77,7 +89,6 @@ function App() {
               <input 
                 type='number' 
                 name='fat' 
-                value={formData.fat}
                 onChange={handleInputChange}
               />
             </label>
@@ -89,7 +100,6 @@ function App() {
               <input 
                 type='number' 
                 name='calories' 
-                value={formData.calories}
                 onChange={handleInputChange}
               />
             </label>
@@ -98,8 +108,7 @@ function App() {
               Budget: 
               <input 
                 type='number' 
-                name='budget' 
-                value={formData.budget}
+                name='budget'
                 onChange={handleInputChange}
               />
             </label>
