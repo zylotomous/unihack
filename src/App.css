@@ -35,15 +35,6 @@ body {
   gap: 1rem;
 }
 
-#header h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 /* Button styles */
 #toggleFilterBtn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -61,10 +52,6 @@ body {
 #toggleFilterBtn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-}
-
-#toggleFilterBtn:active {
-  transform: translateY(0);
 }
 
 /* Main content area */
@@ -105,14 +92,14 @@ body {
   gap: 1.2rem;
 }
 
-/* Input rows - side by side */
+/* Input rows */
 .input-row {
   display: flex;
   gap: 1rem;
   width: 100%;
 }
 
-/* Input field styles - FIXED for alignment */
+/* Input field styles */
 .inputForm {
   display: flex;
   flex-direction: column;
@@ -125,7 +112,6 @@ body {
   width: 100%;
 }
 
-/* Make inputs in a row equal width */
 .input-row .inputForm {
   flex: 1;
   min-width: 0;
@@ -144,28 +130,11 @@ body {
   text-align: left;
 }
 
-.inputForm input:hover {
-  border-color: #b0b0b0;
-  background: white;
-}
-
 .inputForm input:focus {
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
   background: white;
-}
-
-.inputForm input::placeholder {
-  color: #aaa;
-  font-weight: 300;
-}
-
-/* Remove spinner buttons from number inputs for cleaner look */
-.inputForm input[type=number]::-webkit-inner-spin-button,
-.inputForm input[type=number]::-webkit-outer-spin-button {
-  opacity: 0.5;
-  height: 20px;
 }
 
 /* Button row */
@@ -196,26 +165,6 @@ body {
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
 
-#resetButton {
-  background: white;
-  color: #666;
-  border: 2px solid #e0e0e0;
-  padding: 0.6rem 1.5rem;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  flex: 1;
-  max-width: 200px;
-}
-
-#resetButton:hover {
-  border-color: #ff4757;
-  color: #ff4757;
-  background: #fff5f5;
-}
-
 /* Debug info */
 .debug-info {
   margin-top: 1rem;
@@ -225,87 +174,49 @@ body {
   font-size: 0.85rem;
   color: #666;
   border-left: 4px solid #667eea;
-  font-family: 'Courier New', monospace;
   text-align: center;
 }
 
-/* Map placeholder */
-.map {
-  background: white;
+/* ============ GOOGLE MAPS STYLES ============ */
+.map-container {
+  width: 100%;
+  height: 500px;
   border-radius: 16px;
-  padding: 2rem;
-  text-align: center;
+  overflow: hidden;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  color: #999;
-  font-size: 1.1rem;
-  border: 2px dashed #e0e0e0;
-  transition: all 0.3s;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-image: radial-gradient(circle at 1px 1px, #e0e0e0 1px, transparent 1px);
-  background-size: 20px 20px;
-  min-height: 300px;
+  margin: 1.5rem 0;
+  position: relative;
+  background: #f0f0f0;
 }
 
-.map:hover {
-  border-color: #667eea;
-  background-color: #f8f9fa;
+/* This is critical - ensures the map div takes full size */
+.map-container div {
+  width: 100% !important;
+  height: 100% !important;
 }
 
-/* Restaurant cards */
-.restaurant-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.restaurant-card {
+/* Loading state */
+.map-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #666;
+  font-size: 1rem;
   background: white;
-  border-radius: 16px;
-  padding: 1.2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s;
-  border: 1px solid #f0f0f0;
-}
-
-.restaurant-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.15);
-  border-color: #667eea;
-}
-
-.restaurant-card h3 {
-  font-size: 1.2rem;
-  margin-bottom: 0.3rem;
-  color: #333;
-}
-
-.restaurant-card .cuisine {
-  color: #667eea;
-  font-weight: 500;
-  font-size: 0.85rem;
-  margin-bottom: 0.75rem;
-  display: inline-block;
-  padding: 0.2rem 0.8rem;
-  background: #f0f3ff;
+  padding: 1rem 2rem;
   border-radius: 50px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 1;
 }
 
-/* ============ SUPER COMPACT FOOTER ============ */
+/* ============ FOOTER ============ */
 #footer {
   background: white;
   padding: 0.25rem 0.5rem;
   text-align: center;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
   font-size: 0.7rem;
-  line-height: 1;
-  position: relative;
-  bottom: 0;
-  width: 100%;
-  height: auto;
   min-height: 30px;
   display: flex;
   align-items: center;
@@ -321,50 +232,25 @@ body {
   gap: 0.15rem;
   flex-wrap: wrap;
   margin: 0;
-  padding: 0;
 }
 
 #footer a {
   color: #667eea;
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.2s;
 }
 
-#footer a:hover {
-  color: #764ba2;
-  text-decoration: underline;
-}
-
-/* CC license images - tiny */
+/* CC license images */
 #cc {
   height: 12px;
   width: auto;
-  margin-left: 1px;
-  transition: transform 0.2s;
   vertical-align: middle;
 }
 
-#cc:hover {
-  transform: scale(1.1);
-}
-
-/* Responsive design */
+/* Responsive */
 @media (max-width: 768px) {
-  #header {
-    padding: 0.75rem 1rem;
-    flex-direction: column;
-    text-align: center;
-  }
-  
   #main-content {
     padding: 0 1rem;
-    margin: 1rem auto;
-    width: 100%;
-  }
-  
-  .filter {
-    padding: 1rem;
   }
   
   .input-row {
@@ -372,56 +258,18 @@ body {
     gap: 0.8rem;
   }
   
-  .input-row .inputForm {
-    width: 100%;
-  }
-  
-  .button-group {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  #buttonForm, #resetButton {
-    max-width: 100%;
-    width: 100%;
+  .map-container {
+    height: 350px;
   }
   
   #buttonForm {
     min-width: unset;
     width: 100%;
   }
-  
-  .map {
-    flex: 1;
-    padding: 1.5rem;
-    min-height: 200px;
-  }
-  
-  /* Footer even smaller on mobile */
-  #footer {
-    padding: 0.15rem 0.25rem;
-    min-height: 24px;
-  }
-  
-  #footer p {
-    font-size: 0.6rem;
-  }
-  
-  #cc {
-    height: 10px;
-  }
 }
 
-/* For very small screens */
 @media (max-width: 480px) {
-  #footer p {
-    flex-direction: row;
-    gap: 0.1rem;
+  .map-container {
+    height: 300px;
   }
-}
-
-/* Remove any extra spacing */
-body > #root > #footer {
-  margin-top: 0;
-  flex-shrink: 0;
 }
