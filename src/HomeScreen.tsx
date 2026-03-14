@@ -48,7 +48,10 @@ const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 export default function HomeScreen() {
   const [showFilters, setShowFilters] = useState(false)
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS)
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
+  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>({
+  lat: -33.9173,
+  lng: 151.2313
+})
   const [locationError, setLocationError] = useState<string | null>(null)
   const [results, setResults] = useState<MealResult[]>([])
   const [loading, setLoading] = useState(false)
