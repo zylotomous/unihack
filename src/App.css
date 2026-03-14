@@ -184,3 +184,114 @@
   margin-left: .2em;
   padding-top: 4px;
 }
+
+/* ── Meal Cards ── */
+.map-area {
+  overflow-y: auto;
+}
+.meal-card {
+  padding: 14px 16px;
+  border-bottom: 1px solid #e5e4e7;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.meal-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.meal-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+.meal-price {
+  font-weight: 600;
+  font-size: 15px;
+  color: #000;
+}
+.meal-restaurant {
+  font-size: 13px;
+  color: #777;
+}
+.meal-macros {
+  font-size: 13px;
+  color: #444;
+  margin-top: 2px;
+}
+.meal-reasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+.reason-tag {
+  background: #f0f0f0;
+  border-radius: 12px;
+  padding: 3px 10px;
+  font-size: 11px;
+  color: #555;
+}
+
+/* Sort bar */
+.sort-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  flex-wrap: wrap;
+}
+.result-count {
+  font-size: 13px;
+  color: #888;
+  margin-right: auto;
+}
+.sort-btn {
+  padding: 4px 12px;
+  border-radius: 16px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+}
+.sort-btn--active {
+  background: #222;
+  color: white;
+  border-color: #222;
+}
+
+/* Meal cards */
+.results-list { padding: 0 16px 100px; overflow-y: auto; }
+.meal-card {
+  background: white;
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.meal-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.meal-name { font-weight: 600; font-size: 15px; }
+.venue-badge {
+  color: white;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: capitalize;
+}
+.meal-restaurant { font-size: 13px; color: #555; margin-bottom: 8px; }
+.meal-macros { display: flex; gap: 10px; flex-wrap: wrap; font-size: 13px; margin-bottom: 8px; }
+.match-reasons { display: flex; gap: 6px; flex-wrap: wrap; }
+.reason-chip {
+  background: #f0f0f0;
+  border-radius: 8px;
+  padding: 2px 8px;
+  font-size: 11px;
+  color: #444;
+}
+.location-warning { font-size: 12px; color: #e67e22; padding: 4px 16px; margin: 0; }
+.loading-text { text-align: center; padding: 32px; color: #888; }
