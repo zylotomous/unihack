@@ -10,6 +10,15 @@ from services.ranking import passes_filters, compute_match_score, get_priority_t
 
 app = FastAPI(title="MacroMap API")
 
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # change to specific domain before final deploy
