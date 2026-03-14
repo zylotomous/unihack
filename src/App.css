@@ -24,9 +24,11 @@ body {
 }
 
 /* Header styles */
-#header {
-  background: white;
+#header{
+  /* background: white; */
   padding: 1rem 2rem;
+  background-color: white;
+  border: 1.5px black solid;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
@@ -44,6 +46,29 @@ body {
   background-clip: text;
 }
 
+/* Style for the Search Bar */
+#searchBar {
+  width: 65%;
+  border-radius: 20px;
+  border: 1.5px gray solid;
+}
+
+#searchText{
+  display: flexbox;
+  align-content: center;
+  background-color: white;
+  color: black;
+  border: transparent;
+  padding: 5px;
+}
+
+#searchImg{
+  display: flex;
+  margin-top: 20px;
+  margin-left: 10px;
+  align-items: start;
+  width: 10%;
+}
 /* Button styles */
 #toggleFilterBtn {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
