@@ -59,6 +59,25 @@ function App() {
     }
   };
 
+  const [apiResult, setApiResult] = useState<any[]>([]);
+  const requestApi = async (e: any) => {
+    toggleFilters();
+    e.preventDefault();
+    try {
+        const res = await fetch(`api`, {
+        method: 'GET', 
+        headers: {
+          'Content/type' : "application/json"
+        }, 
+        body: JSON.stringify(formData)
+      })
+      const data = await res.json();
+      setApiResult(data); 
+    } catch (e) {
+      
+    }
+  }
+
   // When input loses focus, ensure empty fields become 0
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -112,68 +131,73 @@ function App() {
       </button>
     </div>
     
-    <div id='main content'>
+    <div id='main-content'>
       {showFilters && (
         <div className='filter'>
           <form onSubmit={requestApi}>
-            <label className='inputForm'>
-              Protein: 
-              <input 
-                type='number' 
-                name='protein' 
-                placeholder="0"
-                value={inputValues.protein}
-                onChange={handleInputChange}
-                onBlur={handleBlur}
-              />
-            </label>
+            {/* First row - Protein and Fat */}
+            <div className="input-row">
+              <label className='inputForm'>
+                Protein (g)
+                <input 
+                  type='number' 
+                  name='protein' 
+                  placeholder="0"
+                  value={inputValues.protein}
+                  onChange={handleInputChange}
+                  onBlur={handleBlur}
+                />
+              </label>
+              
+              <label className='inputForm'>
+                Fat (g)
+                <input 
+                  type='number' 
+                  name='fat' 
+                  placeholder="0"
+                  value={inputValues.fat}
+                  onChange={handleInputChange}
+                  onBlur={handleBlur}
+                />
+              </label>
+            </div>
             
-            <label className='inputForm'>
-              Fat: 
-              <input 
-                type='number' 
-                name='fat' 
-                placeholder="0"
-                value={inputValues.fat}
-                onChange={handleInputChange}
-                onBlur={handleBlur}
-              />
-            </label>
+            {/* Second row - Calories and Budget */}
+            <div className="input-row">
+              <label className='inputForm'>
+                Calories
+                <input 
+                  type='number' 
+                  name='calories' 
+                  placeholder="0"
+                  value={inputValues.calories}
+                  onChange={handleInputChange}
+                  onBlur={handleBlur}
+                />
+              </label>
+              
+              <label className='inputForm'>
+                Budget ($)
+                <input 
+                  type='number' 
+                  name='budget' 
+                  placeholder="0"
+                  value={inputValues.budget}
+                  onChange={handleInputChange}
+                  onBlur={handleBlur}
+                />
+              </label>
+            </div>
             
-            <br/>
-            
-            <label className='inputForm'>
-              Calories: 
-              <input 
-                type='number' 
-                name='calories' 
-                placeholder="0"
-                value={inputValues.calories}
-                onChange={handleInputChange}
-                onBlur={handleBlur}
-              />
-            </label>
-            
-            <label className='inputForm'>
-              Budget: 
-              <input 
-                type='number' 
-                name='budget' 
-                placeholder="0"
-                value={inputValues.budget}
-                onChange={handleInputChange}
-                onBlur={handleBlur}
-              />
-            </label>
-            
-            <br/>
-            
-            <button id='buttonForm' type='button'>Apply Filter</button>
+            {/* Button row */}
+            <div className="button-row">
+              <button id='buttonForm' type='submit'>Apply Filter</button>
+            </div>
           </form>
           
           {/* Optional: Display current numeric values for debugging */}
-          <div style={{marginTop: '10px', fontSize: '12px', color: '#666'}}>
-            Current values: Protein: {formData.protein}g, Fat: {formData.fat}g, Calories: {formData.calories}, Budget: ${formData.budget}
+          <div className="debug-info">
+            Current: P:{formData.protein}g | F:{formData.fat}g | C:{formData.calories} | ${formData.budget}
           </div>
         </div>
       )}
@@ -184,8 +208,12 @@ function App() {
     <div id='footer'>
       <p>This work is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a><img id='cc'src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC"/><img id='cc' src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY"/><img id='cc' src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC"/></p>
     </div>
-    </>
+    
+    </div>
   )
+
+  
 }
+
 
 export default App;
