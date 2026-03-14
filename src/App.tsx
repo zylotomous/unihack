@@ -94,14 +94,19 @@ function App() {
     }
   }
 
-  function getYear () {
-    const date:Date = new Date();
-    return date.getFullYear();
+  const toggleFilters = () => {
+    setShowFilters(!showFilters);
   }
 
   return (
     <>
-    <div id='header'>
+    <div id='headers'>
+      <img src='' alt='logo'/>
+      <img src='' alt='user'/>
+    </div>
+
+    <div id='search'>
+      <img src='' alt='search'></img>
       <button onClick={toggleFilters} id='toggleFilterBtn'>
         {showFilters ? 'Hide Filters' : 'Show Filters'}
       </button>
