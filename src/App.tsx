@@ -23,7 +23,7 @@ function App() {
   });
 
   function requestApi () {
-    let res;
+    let res = setFormData;
     return res;
   }
 
@@ -35,18 +35,16 @@ function App() {
     <>
     <div id='header'></div>
     <div id='main content'>
-      {/* idk how to hide ts tbh */}
+      {/* idk how to hide and fix ts tbh */}
       <div className='filter'>
         <form onSubmit={requestApi()}>
-          <label>Protein: <input type='number' name='protein'/></label>
+          <label className='inputForm'>Protein: <input type='number' name='protein' value={formData.protein}/></label>
+          <label className='inputForm'>Fat: <input type='number' name='fat' value={formData.fat}/></label>
           <br/>
-          <label>Fat: <input type='number' name='fat'/></label>
+          <label className='inputForm'>Calories: <input type='number' name='calories' value={formData.calories}/></label>
+          <label className='inputForm'>Budget: <input type='number' name='budget' value={formData.budget}/></label>
           <br/>
-          <label>Calories: <input type='number' name='calories'/></label>
-          <br/>
-          <label>Budget: <input type='number' name='budget'/></label>
-          <br/>
-          <button>Apply Filter</button>
+          <button id='buttonForm' type='button'>Apply Filter</button>
         </form>
       </div>
       <div className='map'></div>
