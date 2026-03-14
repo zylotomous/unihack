@@ -12,12 +12,16 @@ class MacroFilters(BaseModel):
     carbs_max: Optional[float] = None
     fat_min: Optional[float] = None
     fat_max: Optional[float] = None
+    calories_min: Optional[float] = None
     calories_max: Optional[float] = None
+    max_price: Optional[float] = None
+    preferred_venue_types: Optional[list[str]] = None  # ["restaurant","fast_food","grocery"]
+    sort_by: Optional[str] = None  # "score", "protein", "price"
 
 class SearchRequest(BaseModel):
     location: Location
     radius_meters: int = 1500
-    filters: MacroFilters
+    filters: MacroFilters = MacroFilters()  # ← default so frontend doesn't HAVE to send it
 
 class Macros(BaseModel):
     protein_g: float
@@ -31,6 +35,12 @@ class MealResult(BaseModel):
     address: str
     location: Location
     macros: Macros
-    price: Optional[str] = None
-    priority_tier: int       # 1=restaurant, 2=fast food, 3=grocery
-    match_score: float       # 0.0 - 1.0
+    price: Optional[float] = None        # ← float not str
+    priority_tier: int
+    match_score: float
+    distance_m: Optional[float] = None   # ← NEW
+    venue_type: Optional[str] = None     # ← NEW
+    match_reasons: Optional[list[str]] = None  # ← NEW
+
+class SearchResponse(BaseModel):        # ← NEW
+    results: list[MealResult]
