@@ -14,13 +14,6 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-app.add_middleware(
-    CORSMiddleware,
     allow_origins=["*"],  # change to specific domain before final deploy
     allow_credentials=True,
     allow_methods=["*"],
