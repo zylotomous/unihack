@@ -34,7 +34,7 @@ function App() {
   };
 
   const [apiResult, setApiResult] = useState<any[]>([]);
-  const requestApi = async (e) => {
+  const requestApi = async (e:any) => {
     e.preventDefault();
     try {
         const res = await fetch(`api`, {
