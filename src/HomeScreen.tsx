@@ -49,15 +49,16 @@ export default function HomeScreen() {
   const [showFilters, setShowFilters] = useState(false)
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS)
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>({
-  lat: -33.9173,
-  lng: 151.2313
-})
+    lat: -33.9173,
+    lng: 151.2313
+  })
   const [locationError, setLocationError] = useState<string | null>(null)
   const [results, setResults] = useState<MealResult[]>([])
   const [loading, setLoading] = useState(false)
   const [sortBy, setSortBy] = useState<'score' | 'protein' | 'price'>('score')
+  const [searched, setSearched] = useState(false)
+  const [searchText, setSearchText] = useState('')
 
-  // Grab GPS on mount — one-shot, no polling
   useEffect(() => {
     if (!navigator.geolocation) {
       setLocationError('Geolocation not supported')
@@ -66,7 +67,6 @@ export default function HomeScreen() {
     navigator.geolocation.getCurrentPosition(
       (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
       () => {
-        // Fallback to UNSW if user denies
         setUserLocation({ lat: -33.9173, lng: 151.2313 })
         setLocationError('Location denied – using UNSW as default')
       }
@@ -102,16 +102,22 @@ export default function HomeScreen() {
     } catch (err) {
       console.error('Search failed:', err)
     } finally {
+      setSearched(true)
       setLoading(false)
     }
   }
 
-  // Client-side re-sort without re-fetching
   const sorted = [...results].sort((a, b) => {
     if (sortBy === 'protein') return b.macros.protein_g - a.macros.protein_g
     if (sortBy === 'price') return (a.price ?? 999) - (b.price ?? 999)
     return b.match_score - a.match_score
   })
+
+  const filtered = sorted.filter(m =>
+    searchText === '' ||
+    m.restaurant_name.toLowerCase().includes(searchText.toLowerCase()) ||
+    m.meal_name.toLowerCase().includes(searchText.toLowerCase())
+  )
 
   return (
     <div className="app">
@@ -128,7 +134,13 @@ export default function HomeScreen() {
         <span className="search-icon">
           <img src={magglassSvg} alt="search" width={20} height={20} />
         </span>
-        <input type="text" placeholder="Search a specific restaurant here" className="search-input" />
+        <input
+          type="text"
+          placeholder="Search a specific restaurant here"
+          className="search-input"
+          value={searchText}
+          onChange={e => setSearchText(e.target.value)}
+        />
         <button className={`filter-btn${showFilters ? ' filter-btn--active' : ''}`} onClick={() => setShowFilters(v => !v)}>
           <img src={filterSvg} alt="filter" width={24} height={24} />
         </button>
@@ -162,7 +174,7 @@ export default function HomeScreen() {
       {/* ── Sort Buttons + Result Count ── */}
       {results.length > 0 && (
         <div className="sort-bar">
-          <span className="result-count">{results.length} results</span>
+          <span className="result-count">{filtered.length} results</span>
           {(['score', 'protein', 'price'] as const).map(opt => (
             <button
               key={opt}
@@ -178,7 +190,10 @@ export default function HomeScreen() {
       {/* ── Meal Cards ── */}
       <main className="results-list">
         {loading && <p className="loading-text">Finding meals near you…</p>}
-        {!loading && sorted.map((meal, i) => (
+        {!loading && searched && results.length === 0 && (
+          <p className="empty-state">No meals found. Try relaxing your filters.</p>
+        )}
+        {!loading && filtered.map((meal, i) => (
           <div key={i} className="meal-card">
             <div className="meal-card-header">
               <span className="meal-name">{meal.meal_name}</span>
