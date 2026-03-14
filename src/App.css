@@ -1,0 +1,24 @@
+.inputForm{
+  padding: 10px;
+}
+
+#buttonForm {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 20px;
+}
+
+#footer{
+  display: flexbox;
+  font-family: Arial, Helvetica, sans-serif;
+  position: absolute;
+  padding-left: 28%;
+  bottom: .2em;
+}
+
+#cc {
+  max-width: 1em;
+  max-height: 1em;
+  margin-left: .2em;
+  padding-top: 4px;
+}
