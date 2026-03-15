@@ -1,199 +1,136 @@
 import { useState } from 'react'
 import './App.css'
+import PresetsPopup from './PresetsPopup'
+import MapsScreen from './MapsScreen'
 
-interface Macros {
-  protein: number, 
-  fat: number, 
-  calories: number, 
-  budget: number,
+import logoSvg from './assets/logo.svg'
+import profileSvg from './assets/pfp.svg'
+import filterSvg from './assets/filters.svg'
+import magglassSvg from './assets/magglass.svg'
+import exploreSvg from './assets/explore.svg'
+import mapsSvg from './assets/maps.svg'
+import bookmarkSvg from './assets/favs.svg'
+import offersSvg from './assets/offers.svg'
+import FavScreen from './Favs'
+
+export interface Filters {
+  protein: string
+  fat: string
+  calories: string
+  budget: string
 }
 
-interface InputState {
-  protein: string;
-  fat: string;
-  calories: string;
-  budget: string;
-}
+const EMPTY_FILTERS: Filters = { protein: '', fat: '', calories: '', budget: '' }
 
-function App() {
-  // Keep the numeric values for the actual data
-  const [formData, setFormData] = useState<Macros>({
-    protein: 0,
-    fat: 0,
-    calories: 0,
-    budget: 0
-  });
-  
-  // Separate state for input display values (as strings)
-  const [inputValues, setInputValues] = useState<InputState>({
-    protein: '0',
-    fat: '0',
-    calories: '0',
-    budget: '0'
-  });
-  
-  const [showFilters, setShowFilters] = useState(false);
+type Screen = 'home' | 'maps' | 'favs'
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    
-    // Update the display value (can be empty string or any number)
-    setInputValues({
-      ...inputValues,
-      [name]: value
-    });
-    
-    // Only update the numeric formData if there's a valid number
-    // This prevents updating while user is deleting
-    if (value === '') {
-      // Don't update formData yet - wait until they finish typing
-      return;
-    }
-    
-    const numValue = parseFloat(value);
-    if (!isNaN(numValue)) {
-      setFormData({
-        ...formData,
-        [name]: numValue
-      });
-    }
-  };
+export default function App() {
+  const [screen, setScreen] = useState<Screen>('home')
+  const [showPresets, setShowPresets] = useState(false)
+  const [appliedFilters, setAppliedFilters] = useState<Filters>(EMPTY_FILTERS)
 
-  const [apiResult, setApiResult] = useState<any[]>([]);
-  const requestApi = async (e: any) => {
-    toggleFilters();
-    e.preventDefault();
-    try {
-        const res = await fetch(`api`, {
-        method: 'GET', 
-        headers: {
-          'Content/type' : "application/json"
-        }, 
-        body: JSON.stringify(formData)
-      })
-      const data = await res.json();
-      setApiResult(data); 
-    } catch (e) {
-      
-    }
-  }
-
-  // When input loses focus, ensure empty fields become 0
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    
-    if (value === '') {
-      // Reset to 0 in both states
-      setInputValues({
-        ...inputValues,
-        [name]: '0'
-      });
-      setFormData({
-        ...formData,
-        [name]: 0
-      });
-    }
-  };
-
-  const toggleFilters = () => {
-    setShowFilters(!showFilters);
-  }
+  const hasFilters = Object.values(appliedFilters).some(v => v !== '')
 
   return (
-    <>
-    <div id='root'>
-      <div id='header'>
-        <img src='' alt='logo'/>
-        <div id='searchBar'>
-          <img src='' alt='search' id='searchImg'/>
-          <input type='text' name='search picture' id='searchText' placeholder='Search Restaurant'/>
-        </div>
-        <button onClick={toggleFilters} id='toggleFilterBtn'>
-          {showFilters ? 'Hide Filters' : 'Show Filters'}
-        </button>
-      </div>
-      
-      <div id='main-content'>
-        {showFilters && (
-          <div className='filter'>
-            <form onSubmit={requestApi}>
-              {/* First row - Protein and Fat */}
-              <div className="input-row">
-                <label className='inputForm'>
-                  Protein (g)
-                  <input 
-                    type='number' 
-                    name='protein' 
-                    placeholder="0"
-                    value={inputValues.protein}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                  />
-                </label>
-                
-                <label className='inputForm'>
-                  Fat (g)
-                  <input 
-                    type='number' 
-                    name='fat' 
-                    placeholder="0"
-                    value={inputValues.fat}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                  />
-                </label>
-              </div>
-              
-              {/* Second row - Calories and Budget */}
-              <div className="input-row">
-                <label className='inputForm'>
-                  Calories
-                  <input 
-                    type='number' 
-                    name='calories' 
-                    placeholder="0"
-                    value={inputValues.calories}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                  />
-                </label>
-                
-                <label className='inputForm'>
-                  Budget ($)
-                  <input 
-                    type='number' 
-                    name='budget' 
-                    placeholder="0"
-                    value={inputValues.budget}
-                    onChange={handleInputChange}
-                    onBlur={handleBlur}
-                  />
-                </label>
-              </div>
-              
-              {/* Button row */}
-              <div className="button-row">
-                <button id='buttonForm' type='submit'>Apply Filter</button>
-              </div>
-            </form>
-            
-            {/* Optional: Display current numeric values for debugging */}
-            <div className="debug-info">
-              Current: P:{formData.protein}g | F:{formData.fat}g | C:{formData.calories} | ${formData.budget}
-            </div>
-          </div>
-        )}
-        
-        <div className='map'></div>
-      </div>
+    <div className="app">
 
-      <div id='footer'>
-        <p>This work is licensed under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a><img id='cc'src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC"/><img id='cc' src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY"/><img id='cc' src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC"/></p>
-      </div>
+      {/* -- Home Screen -- */}
+      {screen === 'home' && (
+        <>
+          <header className="top-bar">
+            <div className="logo">
+              <img src={logoSvg} alt="logo" width={50} height={50} />
+            </div>
+            <div className="profile">
+              <img src={profileSvg} alt="profile" width={40} height={40} />
+            </div>
+          </header>
+
+          <div className="search-bar">
+            <span className="search-icon">
+              <img src={magglassSvg} alt="search" width={20} height={20} />
+            </span>
+            <input
+              type="text"
+              placeholder="Search a specific restaurant here"
+              className="search-input"
+            />
+            <button
+              className={`filter-btn${hasFilters ? ' filter-btn--active' : ''}`}
+              onClick={() => setShowPresets(true)}
+            >
+              <img src={filterSvg} alt="filter" width={24} height={24} />
+            </button>
+          </div>
+
+          {hasFilters && (
+            <div className="filter-chips">
+              {appliedFilters.protein && <span className="filter-chip">Protein: {appliedFilters.protein}g</span>}
+              {appliedFilters.fat && <span className="filter-chip">Fat: {appliedFilters.fat}g</span>}
+              {appliedFilters.calories && <span className="filter-chip">Cal: {appliedFilters.calories}</span>}
+              {appliedFilters.budget && <span className="filter-chip">Budget: ${appliedFilters.budget}</span>}
+              <button className="filter-chip filter-chip--clear" onClick={() => setAppliedFilters(EMPTY_FILTERS)}>? Clear</button>
+            </div>
+          )}
+
+          <main className="map-area">
+            {/* Map component goes here */}
+          </main>
+        </>
+      )}
+
+      {/* -- Maps Screen -- */}
+      {screen === 'maps' && (
+        <MapsScreen
+          filters={appliedFilters}
+          onOpenPresets={() => setShowPresets(true)}
+          onClearFilters={() => setAppliedFilters(EMPTY_FILTERS)}
+        />
+      )}
+
+      {screen === 'favs' && (
+        <FavScreen/>
+      )}
+
+      {/* -- Bottom Navigation -- */}
+      <nav className="bottom-nav">
+        <button
+          className={`nav-item${screen === 'home' ? ' nav-item--active' : ''}`}
+          onClick={() => setScreen('home')}
+        >
+          <img src={exploreSvg} alt="explore" width={32} height={32} />
+          <span>Explore</span>
+        </button>
+        <button
+          className={`nav-item${screen === 'maps' ? ' nav-item--active' : ''}`}
+          onClick={() => setScreen('maps')}
+        >
+          <img src={mapsSvg} alt="maps" width={32} height={32} />
+          <span>Maps</span>
+        </button>
+        <button className="nav-item nav-item--presets" onClick={() => setShowPresets(true)}>
+          <div className="nav-presets-icon">+</div>
+          <span>Presets</span>
+        </button>
+        <button className="nav-item">
+          <img src={bookmarkSvg} alt="favs" width={32} height={32} />
+          <span>Favs</span>
+        </button>
+        <button className="nav-item">
+          <img src={offersSvg} alt="offers" width={32} height={32} />
+          <span>Offers</span>
+        </button>
+      </nav>
+
+      {/* -- Presets Popup -- */}
+      {showPresets && (
+        <PresetsPopup
+          onClose={() => setShowPresets(false)}
+          onApply={f => setAppliedFilters(f)}
+        />
+      )}
+
     </div>
-    </>
   )
 }
 
-
-export default App;
