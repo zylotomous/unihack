@@ -22,7 +22,7 @@ async def get_nearby_restaurants(lat: float, lng: float, radius: int):
     api_key = os.getenv("GOOGLE_PLACES_API_KEY")
 
     # 1. If no API key yet, return hardcoded locations for demo
-    if not api_key or api_key == "your_key_here":
+    if not api_key or api_key == "yourkeyhere":
         return get_demo_restaurants(lat, lng)
 
     url = "https://places.googleapis.com/v1/places:searchNearby"

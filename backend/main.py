@@ -1,3 +1,9 @@
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load .env from backend/ dir so it works regardless of CWD (e.g. uvicorn backend.main:app from root)
+load_dotenv(Path(__file__).resolve().parent / ".env")
+
 import asyncio
 import math
 from fastapi import FastAPI
