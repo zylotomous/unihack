@@ -11,6 +11,7 @@ import exploreSvg from './assets/explore.svg'
 import mapsSvg from './assets/maps.svg'
 import bookmarkSvg from './assets/favs.svg'
 import offersSvg from './assets/offers.svg'
+import FavScreen from './Favs'
 
 export interface Filters {
   protein: string
@@ -21,7 +22,7 @@ export interface Filters {
 
 const EMPTY_FILTERS: Filters = { protein: '', fat: '', calories: '', budget: '' }
 
-type Screen = 'home' | 'maps'
+type Screen = 'home' | 'maps' | 'favs'
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>('home')
@@ -87,6 +88,10 @@ export default function App() {
         />
       )}
 
+      {screen === 'favs' && (
+        <FavScreen/>
+      )}
+
       {/* -- Bottom Navigation -- */}
       <nav className="bottom-nav">
         <button
@@ -128,3 +133,4 @@ export default function App() {
     </div>
   )
 }
+
