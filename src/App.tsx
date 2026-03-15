@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import PresetsPopup from './PresetsPopup'
 import MapsScreen from './MapsScreen'
+import FavsScreen from './Favs'
 
 import logoSvg from './assets/logo.svg'
 import profileSvg from './assets/pfp.svg'
@@ -11,7 +12,6 @@ import exploreSvg from './assets/explore.svg'
 import mapsSvg from './assets/maps.svg'
 import bookmarkSvg from './assets/favs.svg'
 import offersSvg from './assets/offers.svg'
-import FavScreen from './Favs'
 
 export interface Filters {
   protein: string
@@ -89,7 +89,11 @@ export default function App() {
       )}
 
       {screen === 'favs' && (
-        <FavScreen/>
+        <FavsScreen
+          filters={appliedFilters}
+          onOpenPresets={() => setShowPresets(true)}
+          onClearFilters={() => setAppliedFilters(EMPTY_FILTERS)}
+        />
       )}
 
       {/* -- Bottom Navigation -- */}
@@ -112,7 +116,10 @@ export default function App() {
           <div className="nav-presets-icon">+</div>
           <span>Presets</span>
         </button>
-        <button className="nav-item">
+        <button
+          className={`nav-item${screen === 'favs' ? ' nav-item--active' : ''}`}
+          onClick={() => setScreen('favs')}
+        >
           <img src={bookmarkSvg} alt="favs" width={32} height={32} />
           <span>Favs</span>
         </button>
